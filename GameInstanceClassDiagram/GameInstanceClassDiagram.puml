@@ -313,7 +313,7 @@ package "Game Instance" {
 
     ScoopClass::EnterScoop *-- ScoreClass::AddScore
     ScoopClass::EnterScoop *-- EndOfBallBonusClass::ScoopsEntered
-
+    ScoopClass::EnterScoop *-- GobbleHoleClass::EnableBonusGoal
 
 
     +Class "DropTarget" as DropTargetClass{
