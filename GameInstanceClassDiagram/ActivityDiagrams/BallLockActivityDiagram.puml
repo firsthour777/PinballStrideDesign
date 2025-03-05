@@ -1,0 +1,68 @@
+
+
+
+
+
+
+
+
+
+
+
+
+@startuml BallLockActivityDiagram
+
+package BallLock {
+
+    start
+
+    split
+
+        partition LockBall {
+            :LockBall();
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.BallsLocked++;
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

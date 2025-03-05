@@ -1,0 +1,51 @@
+
+
+
+@startuml PegActivityDiagram
+
+package Peg {
+
+    start
+
+    split
+
+        partition HitPeg {
+            :HitPeg();
+
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.PegsHit++;
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

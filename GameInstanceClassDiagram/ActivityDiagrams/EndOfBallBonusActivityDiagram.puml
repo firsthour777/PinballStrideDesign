@@ -1,0 +1,95 @@
+
+
+@startuml EndOfBallBonusActivityDiagram
+
+package EndOfBallBonus {
+
+    start
+
+    split
+
+        partition CalculateEndOfBallBonus {
+            :CalculateEndOfBallBonus();
+
+            :Adds TiltsUsed;
+            :Subtracts PausesUsed;
+            :Adds PlungerLaunchPower;
+            :Adds FlippersHit;
+            :Adds SpinnersHit;
+            :Adds PegsHit;
+            :Subtracts MagicPostsHit;
+            :Subtracts KickbacksHit;
+            :Adds GobbleHolesEntered;
+            :Adds BashTargetsHit;
+            :Adds BumpersHit;
+            :Adds DropTargetsHit;
+            :Adds ScoopsEntered;
+            :Adds BallsLocked;
+            :Adds SlingshotsHit;
+            
+            :Score.AddScore(Int scoreToAdd);
+
+
+
+
+
+        }
+
+    split again
+
+        partition ResetEndOfBallBonus {
+            :ResetEndOfBallBonus();
+            :TiltsUsed = 0;
+            :PausesUsed = 0;
+            :PlungerLaunchPower = 0;
+            :FlippersHit = 0;
+            :SpinnersHit = 0;
+            :PegsHit = 0;
+            :MagicPostsHit = 0;
+            :KickbacksHit = 0;
+            :GobbleHolesEntered = 0;
+            :BashTargetsHit = 0;
+            :BumpersHit = 0;
+            :DropTargetsHit = 0;
+            :ScoopsEntered = 0;
+            :BallsLocked = 0;
+            :SlingshotsHit = 0;
+            :GameTime = 0;
+        }
+
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+
+
+
+
+
+
+@startuml ScoopActivityDiagram
+
+package Scoop {
+
+    start
+
+    split
+
+        partition EnterScoop {
+            :EnterScoop();
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.ScoopsEntered++;
+            :GobbleHole.EnableBonusGoal();
+
+
+        }
+
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

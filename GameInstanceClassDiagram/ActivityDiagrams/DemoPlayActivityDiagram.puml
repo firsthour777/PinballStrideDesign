@@ -1,0 +1,39 @@
+@startuml DemoPlayActivityDiagram
+
+package DemoPlay {
+
+    start
+
+    split
+
+        partition StartDemoPlay {
+
+            :Demo Starts;
+
+            :UI shows Press Any Key to begin play;
+
+        }
+
+    split again
+
+        partition StopDemoPlay {
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+

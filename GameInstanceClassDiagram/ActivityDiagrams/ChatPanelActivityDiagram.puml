@@ -1,0 +1,44 @@
+@startuml ChatPanelActivityDiagram
+
+package ChatPanel {
+
+    start
+
+    split
+
+        partition SendMessage {
+            :SendMessage(chatMessage);
+            :FilterWords(chatMessage);
+            :Add chatMessage to ChatMessageLog;
+            :UpdateChatPanel(ChatMessageLog);
+
+        }
+
+    split again
+
+        partition ReceiveMessage {
+
+            :ReceiveMessage(chatMessage);
+            :FilterWords(chatMessage);
+            :Add chatMessage to ChatMessageLog;
+            :UpdateChatPanel(ChatMessageLog);
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+

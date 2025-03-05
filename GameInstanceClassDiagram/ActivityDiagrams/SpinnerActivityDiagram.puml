@@ -1,0 +1,51 @@
+
+
+
+@startuml SpinnerActivityDiagram
+
+package Spinner {
+
+    start
+
+    split
+
+        partition HitSpinner {
+            :HitSpinner();
+
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.SpinnersHit++;
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

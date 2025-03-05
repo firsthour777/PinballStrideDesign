@@ -1,0 +1,50 @@
+
+@startuml HighScoreActivityDiagram
+
+package HighScore {
+
+    start
+
+    split
+
+        partition AddHighScore {
+
+            :AddHighScore(highScoreToAdd, playerName, playerFlag);
+            :isScoreHighEnough(highScoreToAdd);
+            if (isScoreHighEnough) then (yes)
+                :UpdateHighScoreList(highScoreToAdd);
+                :UpdateHighestScore(highScoreToAdd);
+            else (no)
+                :Do nothing;
+            endif
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

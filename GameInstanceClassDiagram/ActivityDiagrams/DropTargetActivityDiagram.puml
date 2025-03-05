@@ -1,0 +1,39 @@
+@startuml DropTargetActivityDiagram
+
+package DropTarget {
+
+    start
+
+    split
+
+        partition HitDropTarget {
+            :HitDropTarget();
+            :Score.AddScore(scoreToAdd);
+            :EndOfBallBonus.DropTargetsHit++;
+            :isDropTargetDown = !isDropTargetDown;
+
+            if (isDropTargetDown) then (yes)
+                :isAllDropTargetsDown = DetermineIfAllDropTargetsAreDown();
+            else (no)
+                :isAllDropTargetsDown = false;
+                :Scoop.DisableScoop();
+                :GobbleHole.DisableBonusGoal();
+            endif
+        }
+
+
+    split again
+        partition DetermineIfAllDropTargetsAreDown {
+            :DetermineIfAllDropTargetsAreDown();
+            :For Each DropTarget in DropTargets Check isDropTargetDown;
+            :if all are down then :isAllDropTargetsDown = true;
+            :Scoop.EnableScoop();
+
+        }
+
+    end split
+
+    stop
+}
+
+@enduml

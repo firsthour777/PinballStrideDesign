@@ -1,0 +1,54 @@
+
+
+
+@startuml FlipperActivityDiagram
+
+package Flipper {
+
+    start
+
+    split
+
+        partition FlipFlipper {
+            :FlipFlipper();
+
+            if (isCollision) then (yes)
+                :Score.AddScore(Int scoreToAdd);
+                :EndOfBallBonus.FlippersHit++;
+            else (no)
+            endif
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,54 @@
+
+
+
+
+
+
+@startuml KickbackActivityDiagram
+
+package Kickback {
+
+    start
+
+    split
+
+        partition HitKickback {
+            :HitKickback();
+
+            :Score.SubtractScore(Int scoreToSubtract);
+            :EndOfBallBonus.KickbacksHit++;
+            :DisableKickback();
+
+
+
+
+
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+
+
+
+
+
+
+
+
+
+
+
+
+@startuml BumperActivityDiagram
+
+package Bumper {
+
+    start
+
+    split
+
+        partition HitBumper {
+            :HitBumper();
+
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.BumpersHit++;
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

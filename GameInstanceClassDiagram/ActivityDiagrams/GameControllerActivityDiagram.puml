@@ -1,0 +1,173 @@
+
+
+
+
+
+
+
+
+
+
+@startuml GameControllerActivityDiagram
+
+package GameController {
+
+    start
+
+    split
+
+        partition EndGame {
+            :EndGame();
+            :Score.CurrentScore;
+            :HighScore.isScoreHighEnough();
+            
+            ' if isScore true then add high schore:
+            if (isScoreHighEnough) then (yes)
+                :HighScore.AddHighScore(Int highScoreToAdd, String playerName, FlagType playerFlag);
+            else
+                
+            endif
+
+            :DisplayGameOverScreen();
+
+
+
+
+        }
+
+
+    split again
+
+        partition DisplayGameOverScreen {
+            :DisplayGameOverScreen();
+
+            :Score.CurrentScore;
+            :HighScore.HighScoreList;
+            :EndOfBallBonus.GameTime;
+            :EndOfBallBonus.FlippersHit
+            :Ball.TotalBallNumber;
+
+            :Shows These Stats on the UI;
+
+
+            if (isMultiplayerSession) then (yes)
+                :Press Any Key To See Winning Player's Table;
+                :PlayersScores.GetTopPlayerId();
+                :ServerSession.GetClientInfo();
+                :This will show the winning player's table being played;
+                :After 10 Seconds, Ask if the User wants to Play Again;
+                :Takes them to Multiplayer Menu;
+
+
+            else
+                :Press Any Key to Activate Demo;
+                :DemoPlay.StartDemoPlay();
+
+                :After 10 Seconds, Ask if the User wants to Play Again;
+                :Restarts a New Game;
+
+            end if
+
+        }
+
+    split again
+
+        partition StartGame {
+            :StartGame();
+
+            :ResetPlayfield();
+
+            :Score.ResetScore();
+            :BallsLeft.ResetBallsLeft();
+            :Ball.SpawnBallAtPlunger();
+
+            if (isMultiplayerSession) then (yes)
+                :ClientSession.StartClientSession();
+
+                if (isHost) then (yes)
+                    :ServerSession.StartServerSession();
+                else
+                endif
+                
+            else
+
+            endif
+                
+
+        }
+
+
+    split again
+
+        partition ResetPlayfield {
+            :ResetPlayfield();
+            
+            :EndOfBallBonus.ResetEndOfBallBonus();
+            :Slingshot.ResetSlingshot();
+            :BallLock.ResetBallLock();
+            :Scoop.ResetScoop();
+            :DropTarget.ResetDropTarget();
+            :Drain.ResetDrain();
+            :Bumper.ResetBumper();
+            :BashTarget.ResetBashTarget();
+            :GobbleHole.ResetGobbleHole();
+            :Kickback.ResetKickback();
+            :MagicPost.ResetMagicPost();
+            :Peg.ResetPeg();
+            :Spinner.ResetSpinner();
+            :Flipper.ResetFlipper();
+            :Plunger.ResetPlunger();
+
+            
+
+
+
+
+  
+
+                
+
+        }
+
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

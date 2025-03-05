@@ -1,0 +1,47 @@
+
+
+
+
+
+
+@startuml SlingshotActivityDiagram
+
+package Slingshot {
+
+    start
+
+    split
+
+        partition HitSlingshot {
+            :HitSlingshot();
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.SlingshotsHit++;
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

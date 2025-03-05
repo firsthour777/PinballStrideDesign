@@ -1,0 +1,50 @@
+
+@startuml MagicPostActivityDiagram
+
+package MagicPost {
+
+    start
+
+    split
+
+        partition HitMagicPost {
+            :HitMagicPost();
+
+            :Score.SubtractScore(Int scoreToSubtract);
+            :EndOfBallBonus.MagicPostsHit++;
+            :DisableMagicPost();
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

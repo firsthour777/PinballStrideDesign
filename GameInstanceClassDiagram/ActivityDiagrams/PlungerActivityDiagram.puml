@@ -1,0 +1,63 @@
+
+
+
+@startuml PlungerActivityDiagram
+
+package Plunger {
+
+    start
+
+    split
+
+        partition PullPlunger {
+            :PullPlunger();
+            :As Key is Held Down
+            :LaunchPower++;
+            :As Key is Released
+            :LaunchBall();
+
+            
+        }
+
+    split again
+
+        partition LaunchBall {
+            :LaunchBall();
+            :Ball.Velocity = 1000;
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.PlungerLaunchPower++;
+            :ResetPlunger();
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

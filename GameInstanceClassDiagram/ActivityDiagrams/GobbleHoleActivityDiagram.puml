@@ -1,0 +1,116 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@startuml GobbleHoleActivityDiagram
+
+package GobbleHole {
+
+    start
+
+    split
+
+        partition EnterGobbleHole {
+            :EnterGobbleHole();
+
+
+            if (isBonusGoalEnabled) then (yes)
+                :Score.AddScore(Int scoreToAdd);
+                :EndOfBallBonus.GobbleHolesEntered++;
+                :Ball.SpawnBall(Int spawnLocation);
+
+
+            else (no)
+                :Drain.EnterDrain();
+            endif
+
+
+
+
+
+
+
+
+
+            
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

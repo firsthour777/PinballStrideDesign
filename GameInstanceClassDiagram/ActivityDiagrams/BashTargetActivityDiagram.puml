@@ -1,0 +1,68 @@
+
+
+
+
+
+
+
+
+
+
+
+
+@startuml BashTargetActivityDiagram
+
+package BashTarget {
+
+    start
+
+    split
+
+        partition HitBashTarget {
+            :HitBashTarget();
+            :Score.AddScore(Int scoreToAdd);
+            :EndOfBallBonus.BashTargetsHit++;
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

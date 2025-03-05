@@ -1,0 +1,647 @@
+@startuml GameInstanceClassDiagram
+
+package "Game Instance" {
+
+    ' UI Elements
+
+
+    +Class "Score" as ScoreClass{
+        -Int CurrentScore
+        +Void AddScore(Int scoreToAdd)
+        +Void SubtractScore(Int scoreToSubtract)
+        +Void ResetScore()
+        +Void SetScore(Int newScore)
+
+
+    }
+
+    ScoreClass::AddScore *-- KickbackClass::EnableKickback
+    ScoreClass::AddScore *-- MagicPostClass::EnableMagicPost
+
+
+
+
+    +Class "BallsLeft" as BallsLeftClass{
+        -Int CurrentBallsLeft
+        +Void AddBalls(Int ballsToAdd)
+        +Void SubtractBalls(Int ballsToSubtract)
+        +Void ResetBalls()
+        +Void SetBalls(Int newBalls)
+    }
+
+    +Class "HighScore" as HighScoreClass{
+        -Int CurrentHighestScore
+        -List<Int> HighScoreList
+        +Void AddHighScore(Int highScoreToAdd, String playerName, FlagType playerFlag)
+        +Bool IsScoreHighEnough(Int highScoreToAdd)
+        -Void UpdateHighScoreList(Int highScoreToAdd)
+        -Void UpdateHighestScore(Int highScoreToAdd)
+    }
+
+    +Class "PlayerInfo" as PlayerInfoClass{
+        In Settings Class Diagram
+    }
+
+    +Class "EscapeMenu" as EscapeMenuClass{
+        In Escape Menu Class Diagram
+    }
+
+
+
+
+    ' Multiplayer Elements
+
+
+    +Class "ChatPanel" as ChatPanelClass{
+        -String ChatMessageLog
+        -Void UpdateChatPanel(String chatMessages)
+        +String SendMessage(String chatMessage)
+        +String ReceiveMessage(String chatMessage)
+        -String FilterWords(String chatMessage)
+    }
+
+
+    +Class "PlayersScores" as PlayersScoresClass{
+        +List<ClientSession> PlayersScores
+        +Void UpdatePlayersScores(List<ClientSession> playersScores)
+        +Int GetPlayerInfo(Int playerID)
+        +Int GetTopPlayerId()
+    }
+
+
+    +Class "ClientSession" as ClientSessionClass{
+
+        -Void InitializeClientSession()
+
+        -Int PlayerID
+        -PlayerInfo PlayerInfo
+
+        ' Need to give a lot of thought to how this is going to work?
+        ' Do I record the state of all objects on the board and constantly send it and recieve it to other players?
+        ' Or do I simulate their button presses and cause the session engine to simulate the game taht is happening on their screen?
+        ' If you simulate the button presses, then hackers would get that
+        ' I think it might actually be both.
+        ' I just realized how complicated multiplayer actually can be.
+
+
+
+        ' Record States and Inputs
+        ' Inputs are activated automatically on the board
+        ' States are Updated as data gets sent and downloaded,
+        ' not as fast as possible, but perhaps at a 50ms rate?
+
+
+
+
+        -Int PlayerCurrentScore
+        -Int PlayerCurrentBallsLeft
+
+        ' This cannot be input alone through keypress,
+        ' needs to record the action done and send it as fast as possible
+        -PlayerAction PlayerAction
+        ' Player Actions are Tilt, PlungerLaunch, Flipper, Leave Game
+
+        ' End of Ball Bonus
+        -Int TiltsUsed
+        -Int PausesUsed
+        -Int PlungerLaunchPower
+        -Int FlippersHit
+        -Int SpinnersHit
+        -Int PegsHit
+        -Int MagicPostsHit
+        -Int KickbacksHit
+        -Int GobbleHolesEntered
+        -Int BashTargetsHit
+        -Int BumpersHit
+        -Int DropTargetsHit
+        -Int ScoopsEntered
+        -Int BallsLocked
+        -Int SlingshotsHit
+        -Int GameTime
+
+
+
+
+        ' These will be objects with their position data, not their functions
+        ' Data I need
+        ' Position
+        ' Enabled
+        -List<Slingshot> Slingshots
+        -List<BallLock> BallLocks
+        -List<Scoop> Scoops
+        -List<DropTarget> DropTargets
+        -List<Drain> Drains
+        -List<Bumper> Bumpers
+        -List<BashTarget> BashTargets
+        -List<GobbleHole> GobbleHoles
+        -List<Kickback> Kickbacks
+        -List<MagicPost> MagicPosts
+        -List<Peg> Pegs
+        -List<Spinner> Spinners
+        -List<Flipper> Flippers
+        -List<Plunger> Plungers
+        -List<Ball> Balls
+
+
+
+
+
+
+
+
+
+
+        +Void UpdatePlayerScore(Int newScore)
+        +Void UpdatePlayerBallsLeft(Int newBalls)
+    }
+
+
+
+    +Class "ServerSession" as ServerSessionClass{
+        -Void InitializeServerSession()
+
+        -List<ClientSession> ConnectedClients
+
+        -ClientSession GetClientSession()
+        -List<ClientSession> GetClientSession()
+    }
+
+
+
+
+
+
+
+
+
+
+    ' Gameplay Elements
+
+
+    +Class "EndOfBallBonus" as EndOfBallBonusClass{
+        +Int TiltsUsed
+        +Int PausesUsed
+        +Int PlungerLaunchPower
+        +Int FlippersHit
+        +Int SpinnersHit
+        +Int PegsHit
+        +Int MagicPostsHit
+        +Int KickbacksHit
+        +Int GobbleHolesEntered
+        +Int BashTargetsHit
+        +Int BumpersHit
+        +Int DropTargetsHit
+        +Int ScoopsEntered
+        +Int BallsLocked
+        +Int SlingshotsHit
+        +Int GameTime
+
+        +Void ResetEndOfBallBonus()
+
+        +Int CalculateEndOfBallBonus()
+    }
+
+    EndOfBallBonusClass::CalculateEndOfBallBonus *-- ScoreClass::AddScore
+
+
+
+
+
+    +Class "DemoPlay" as DemoPlayClass{
+        -Bool IsEnabled
+        +Void StartDemoPlay()
+        +Void StopDemoPlay()
+
+    }
+
+
+
+
+    +Class "GameController" as GameControllerClass {
+        +Bool isMultiplayerSession
+        +Bool isHost
+        +Void EndGame()
+        -Void DisplayGameOverScreen()
+        +Void StartGame()
+        -Void ResetPlayfield()
+    }
+
+    GameControllerClass::StartGame *-- ScoreClass::ResetScore
+    GameControllerClass::StartGame *-- BallsLeftClass::ResetBallsLeft
+    GameControllerClass::StartGame *-- BallClass::SpawnBallAtPlunger
+    GameControllerClass::StartGame *-- ClientSessionClass::StartClientSession
+    GameControllerClass::StartGame *-- ServerSessionClass::StartServerSession
+
+    GameControllerClass::EndGame *-- ScoreClass::CurrentScore
+    GameControllerClass::EndGame *-- HighScoreClass::isScoreHighEnough
+    GameControllerClass::EndGame *-- HighScoreClass::AddHighScore
+
+    GameControllerClass::DisplayGameOverScreen *-- ScoreClass::CurrentScore
+    GameControllerClass::DisplayGameOverScreen *-- HighScore::HighScoreList
+    GameControllerClass::DisplayGameOverScreen *-- EndOfBallBonusClass::GameTime
+    GameControllerClass::DisplayGameOverScreen *-- EndOfBallBonusClass::FlippersHit
+    GameControllerClass::DisplayGameOverScreen *-- BallClass::TotalBallNumber
+    GameControllerClass::DisplayGameOverScreen *-- PlayersScoresClass::GetTopPlayerId
+    GameControllerClass::DisplayGameOverScreen *-- ServerSessionClass::GetClientInfo
+    GameControllerClass::DisplayGameOverScreen *-- DemoPlayClass::StartDemoPlay
+
+    GameControllerClass::ResetPlayfield *-- EndOfBallBonusClass::ResetEndOfBallBonus
+    GameControllerClass::ResetPlayfield *-- SlingshotClass::ResetSlingshot
+    GameControllerClass::ResetPlayfield *-- BallLockClass::ResetBallLock
+    GameControllerClass::ResetPlayfield *-- ScoopClass::ResetScoop
+    GameControllerClass::ResetPlayfield *-- DropTargetClass::ResetDropTarget
+    GameControllerClass::ResetPlayfield *-- DrainClass::ResetDrain
+    GameControllerClass::ResetPlayfield *-- BumperClass::ResetBumper
+    GameControllerClass::ResetPlayfield *-- BashTargetClass::ResetBashTarget
+    GameControllerClass::ResetPlayfield *-- GobbleHoleClass::ResetGobbleHole
+    GameControllerClass::ResetPlayfield *-- KickbackClass::ResetKickback
+    GameControllerClass::ResetPlayfield *-- MagicPostClass::ResetMagicPost
+    GameControllerClass::ResetPlayfield *-- PegClass::ResetPeg
+    GameControllerClass::ResetPlayfield *-- SpinnerClass::ResetSpinner
+    GameControllerClass::ResetPlayfield *-- FlipperClass::ResetFlipper
+    GameControllerClass::ResetPlayfield *-- PlungerClass::ResetPlunger
+
+
+
+
+
+    ' Playfield Elements
+
+
+    +Class "Slingshot" as SlingshotClass{
+        -List<Slingshot> Slingshots
+        -Bool IsEnabled
+        +Void DisableSlingshot()
+        +Void EnableSlingshot()
+        +Void HitSlingshot()
+        +Void ResetSlingshot()
+    }
+
+
+    SlingshotClass::HitSlingshot *-- ScoreClass::AddScore
+    SlingshotClass::HitSlingshot *-- EndOfBallBonusClass::SlingshotsHit
+
+
+
+    +Class "BallLock" as BallLockClass{
+        -List<BallLock> BallLocks
+        -Bool IsEnabled
+        +Void DisableBallLock()
+        +Void EnableBallLock()
+        +Void LockBall()
+        +Void FreeBall()
+        +Void ResetBallLock()
+
+    }
+
+
+    BallLockClass::LockBall *-- ScoreClass::AddScore
+    BallLockClass::LockBall *-- EndOfBallBonusClass::BallsLocked
+
+
+
+    +Class "Scoop" as ScoopClass{
+        -List<Scoop> Scoops
+        -Bool IsEnabled
+        +Void DisableScoop()
+        +Void EnableScoop()
+        +Void EnterScoop()
+        +Void FreeBall()
+        +Void ResetScoop()
+    }
+
+
+    ScoopClass::EnterScoop *-- ScoreClass::AddScore
+    ScoopClass::EnterScoop *-- EndOfBallBonusClass::ScoopsEntered
+
+
+
+    +Class "DropTarget" as DropTargetClass{
+        -List<DropTarget> DropTargets
+        -Bool isAllDropTargetsDown
+        -Bool IsEnabled
+        -Bool isDropTargetDown = false
+        +Void DisableDropTarget()
+        +Void EnableDropTarget()
+        +Void HitDropTarget()
+        -Void DetermineIfAllDropTargetsAreDown()
+        +Void ResetDropTarget()
+
+    }
+
+    DropTargetClass::HitDropTarget *-- ScoreClass::AddScore
+    DropTargetClass::HitDropTarget *-- EndOfBallBonusClass::DropTargetsHit
+    DropTargetClass::HitDropTarget *-- ScoopClass::DisableScoop
+    DropTargetClass::HitDropTarget *-- GobbleHoleClass::DisableBonusGoal
+    DropTargetClass::DetermineIfAllDropTargetsAreDown *-- ScoopClass::EnableScoop
+
+    +Class "Drain" as DrainClass{
+        -List<Draing> Drains
+        -Bool IsEnabled
+        +Void DisableDrain()
+        +Void EnableDrain()
+        +Void EnterDrain()
+        +Void ResetDrain()
+    }
+
+    DrainClass::EnterDrain *-- BallClass::RemoveBall
+    DrainClass::EnterDrain *-- EndOfBallBonusClass::CalculateEndOfBallBonus
+    DrainClass::EnterDrain *-- EndOfBallBonusClass::ResetEndOfBallBonus
+    DrainClass::EnterDrain *-- BallsLeftClass::CurrentBallsLeft
+    DrainClass::EnterDrain *-- GameControllerClass::EndGame
+    DrainClass::EnterDrain *-- BallClass::SpawnBall
+    DrainClass::EnterDrain *-- GameControllerClass::ResetPlayfield
+
+
+    +Class "Bumper" as BumperClass{
+        -List<Bumper> Bumpers
+        -Bool IsEnabled
+        +Void DisableBumper()
+        +Void EnableBumper()
+        +Void HitBumper()
+        +Void ResetBumper()
+
+    }
+
+    BumperClass::HitBumper *-- ScoreClass::AddScore
+    BumperClass::HitBumper *-- EndOfBallBonusClass::BumpersHit
+
+
+
+
+
+
+    +Class "BashTarget" as BashTargetClass{
+        -List<BashTarget> BashTargets
+        -Bool IsEnabled
+        +Void DisableBashTarget()
+        +Void EnableBashTarget()
+        +Void HitBashTarget()
+        +Void ResetBashTarget()
+
+    }
+
+    BashTargetClass::HitBashTarget *-- ScoreClass::AddScore
+    BashTargetClass::HitBashTarget *-- EndOfBallBonusClass::BashTargetsHit
+
+
+
+
+
+
+
+
+
+
+
+    +Class "GobbleHole" as GobbleHoleClass{
+        -List<GobbleHole> GobbleHoles
+        -Bool IsEnabled
+        -Bool isBonusGoalEnabled
+        +Void DisableGobbleHole()
+        +Void EnableGobbleHole()
+        +Void EnterGobbleHole()
+        +Void EnableBonusGoal()
+        +Void DisableBonusGoal()
+        +Void ResetGobbleHole()
+
+
+
+    }
+
+
+
+    GobbleHoleClass::EnterGobbleHole *-- ScoreClass::AddScore
+    GobbleHoleClass::EnterGobbleHole *-- EndOfBallBonusClass::GobbleHolesEntered
+    GobbleHoleClass::EnterGobbleHole *-- BallClass::SpawnBall
+    GobbleHoleClass::EnterGobbleHole *-- DrainClass::EnterDrain
+
+
+
+    +Class "Kickback" as KickbackClass{
+        -List<Kickback> Kickbacks
+        -Bool IsEnabled
+        +Void DisableKickback()
+        +Void EnableKickback()
+        +Void HitKickback()
+        +Void ResetKickback()
+
+    }
+
+
+    KickbackClass::HitKickback *-- ScoreClass::SubtractScore
+    KickbackClass::HitKickback *-- EndOfBallBonusClass::KickbacksHit
+
+
+    +Class "MagicPost" as MagicPostClass{
+        -List<MagicPost> MagicPosts
+        -Bool IsEnabled
+        +Void DisableMagicPost()
+        +Void EnableMagicPost()
+        +Void HitMagicPost()
+        +Void ResetMagicPost()
+
+    }
+
+
+    MagicPostClass::HitMagicPost *-- ScoreClass::SubtractScore
+    MagicPostClass::HitMagicPost *-- EndOfBallBonusClass::MagicPostsHit
+
+
+
+
+
+
+
+    +Class "Peg" as PegClass{
+        -List<Peg> Pegs
+        -Bool IsEnabled
+        +Void DisablePeg()
+        +Void EnablePeg()
+        +Void HitPeg()
+        +Void ResetPeg()
+
+
+    }
+
+
+    PegClass::HitPeg *-- ScoreClass::AddScore
+    PegClass::HitPeg *-- EndOfBallBonusClass::PegsHit
+
+
+
+
+    +Class "Spinner" as SpinnerClass{
+        -List<Spinner> Spinners
+        -Bool IsEnabled
+        +Void DisableSpinner()
+        +Void EnableSpinner()
+        +Void SpinSpinner()
+        +Void HitSpinner()
+        +Void ResetSpinner()
+    }
+
+    SpinnerClass::HitSpinner *-- ScoreClass::AddScore
+    SpinnerClass::HitSpinner *-- EndOfBallBonusClass::SpinnersHit
+
+
+
+
+
+
+
+
+
+    +Class "Flipper" as FlipperClass{
+        -List<Flipper> Flippers
+        -Bool IsEnabled
+        +Void FlipFlipper()
+        +Void DisableFlipper()
+        +Void EnableFlipper()
+        +Void ResetFlipper()
+    }
+
+    FlipperClass::FlipFlipper *-- ScoreClass::AddScore
+    FlipperClass::FlipFlipper *-- EndOfBallBonusClass::FlippersHit
+
+
+
+
+
+
+
+    +Class "Plunger" as PlungerClass{
+        -List<Plunger> Plungers
+        -LaunchPower
+        +Void PullPlunger()
+        -Void LaunchBall()
+        +Void ResetPlunger()
+
+
+    }
+
+    PlungerClass::LaunchBall *-- BallClass::Velocity
+    PlungerClass::LaunchBall *-- ScoreClass::AddScore
+    PlungerClass::LaunchBall *-- EndOfBallBonusClass::PlungerLaunchPower
+    
+
+
+
+
+
+    +Class "Ball" as BallClass{
+        +List<Ball> BallsInPlay
+        +Int Velocity
+        +Int Momentum
+        +Int Acceleration
+        +Int Impulse
+        +Int BallNumber
+        +Int Direction
+        +Int TotalBallNumber
+
+        +Void RemoveBall(Ball ballToRemove)
+        +Void SpawnBall(Int spawnLocation)
+        +Void SpawnBallAtPlunger()
+
+
+    }
+
+
+
+
+
+
+    ' Buttons Elements
+
+    +Class "EscapeMenu" as EscapeMenuClass{
+        In Escape Menu Class Diagram
+    }
+
+    +Class "Tilt" as TiltClass{
+        +Void TiltPlayfield()
+    }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

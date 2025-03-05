@@ -1,0 +1,72 @@
+
+
+
+
+
+
+
+
+
+
+@startuml ScoreActivityDiagram
+
+package Score {
+
+    start
+
+    split
+
+        partition AddScore {
+            :AddScore(Int scoreToAdd);
+
+            :originalScore = CurrentScore;
+            :CurrentScore += scoreToAdd;
+            :roundedDownCurrentScore = RoundDownToThousands(CurrentScore);
+            :roundedDownOriginalScore = RoundDownToThousands(originalScore);
+
+            if ((roundedDownCurrentScore - roundedDownOriginalScore) >= 1000) then (Yes)
+                :Kickback.EnableKickback();
+            endif
+
+            :roundedDownCurrentScore = RoundDownToTenThousands(CurrentScore);
+            :roundedDownOriginalScore = RoundDownToTenThousands(originalScore);
+
+            if ((roundedDownCurrentScore - roundedDownOriginalScore) >= 10000) then (Yes)
+                :MagicPost.EnableMagicPost();
+            endif
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

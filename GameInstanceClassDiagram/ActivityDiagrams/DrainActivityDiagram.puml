@@ -1,0 +1,58 @@
+
+
+
+
+
+
+@startuml DrainActivityDiagram
+
+package Drain {
+
+    start
+
+    split
+
+        partition EnterDrain {
+            :EnterDrain();
+            :EndOfBallBonus.CalculateEndOfBallBonus();
+            :EndOfBallBonus.ResetEndOfBallBonus();
+            :Ball.RemoveBall();
+            :BallsLeft.CurrentBallsLeft--;
+            :GameController.ResetPlayField();
+            ' if current balls left is 0, then game over and then do high score
+            ' else spawn ball
+            if (CurrentBallsLeft == 0) then (yes)
+                :GameController.EndGame();
+            else (no)
+                :Ball.SpawnBall();
+            endif
+
+
+
+        }
+
+    end split
+
+
+    stop
+
+}
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
