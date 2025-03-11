@@ -514,15 +514,15 @@ package "Game Instance" {
         -List<Plunger> Plungers
         -LaunchPower
         +Void PullPlunger()
-        -Void LaunchBall()
+        -Void ReleasePlunger()
         +Void ResetPlunger()
 
 
     }
 
-    PlungerClass::LaunchBall *-- BallClass::Velocity
-    PlungerClass::LaunchBall *-- ScoreClass::AddScore
-    PlungerClass::LaunchBall *-- EndOfBallBonusClass::PlungerLaunchPower
+    PlungerClass::ReleasePlunger *-- BallClass::Velocity
+    PlungerClass::ReleasePlunger *-- ScoreClass::AddScore
+    PlungerClass::ReleasePlunger *-- EndOfBallBonusClass::PlungerLaunchPower
     
 
 

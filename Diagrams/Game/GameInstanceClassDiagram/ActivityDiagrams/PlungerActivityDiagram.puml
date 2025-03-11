@@ -14,15 +14,15 @@ package Plunger {
             :As Key is Held Down
             :LaunchPower++;
             :As Key is Released
-            :LaunchBall();
+            :ReleasePlunger();
 
             
         }
 
     split again
 
-        partition LaunchBall {
-            :LaunchBall();
+        partition ReleasePlunger {
+            :ReleasePlunger();
             :Ball.Velocity = 1000;
             :Score.AddScore(Int scoreToAdd);
             :EndOfBallBonus.PlungerLaunchPower++;
